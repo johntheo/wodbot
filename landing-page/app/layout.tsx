@@ -8,6 +8,8 @@ import { useEffect } from "react"
 import { Toaster } from "@/components/ui/sonner"
 import { PostHogProvider } from "@/components/PostHogProvider"
 import { metadata } from "./metadata"
+import { Analytics } from "@vercel/analytics/react"
+import { cn } from "@/lib/utils"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -23,13 +25,13 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="/carousel.css" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#FF4B91" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="WodBot" />
@@ -37,12 +39,13 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="WodBot" />
       </head>
-      <body className={inter.className}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
         <PostHogProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
           </ThemeProvider>
           <Toaster />
+          <Analytics />
         </PostHogProvider>
       </body>
     </html>
