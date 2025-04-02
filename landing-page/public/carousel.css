@@ -1,0 +1,56 @@
+/* Carousel styling */
+.scroller {
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.scroller__inner {
+  padding-block: 1rem;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+}
+
+/* Ajuste a animação para garantir que funcione corretamente */
+.scroller[data-animated="true"] {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+}
+
+.scroller[data-animated="true"] .scroller__inner {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scroll 40s linear infinite;
+}
+
+.scroller[data-animated="true"]:hover .scroller__inner {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroller[data-animated="true"] .scroller__inner {
+    animation-play-state: paused;
+  }
+}
+
+.tag-list {
+  margin: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+
+.tag-list li {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
