@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { Dumbbell } from "lucide-react"
 
+export const dynamic = 'force-static'
+
 export default function PrivacyPolicy() {
   return (
     <div className="flex min-h-screen flex-col">
