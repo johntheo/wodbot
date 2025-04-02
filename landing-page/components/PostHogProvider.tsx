@@ -1,19 +1,19 @@
 "use client"
 
+import { useEffect } from "react"
 import posthog from "posthog-js"
 import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react"
-import { Suspense, useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: "/ingest",
-      ui_host: "https://eu.posthog.com",
-      capture_pageview: false, // We capture pageviews manually
-      capture_pageleave: true, // Enable pageleave capture
-    })
-  }, [])
+  // Initialize PostHog
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: 'https://wodbot.cc/ingest',
+    ui_host: "https://eu.posthog.com",
+    loaded: (posthog) => {
+      if (process.env.NODE_ENV === 'development') posthog.debug()
+    }
+  })
 
   return (
     <PHProvider client={posthog}>
@@ -30,11 +30,7 @@ function PostHogPageView() {
 
   useEffect(() => {
     if (pathname && posthog) {
-      let url = window.origin + pathname
-      const search = searchParams.toString()
-      if (search) {
-        url += "?" + search
-      }
+      const url = window.location.href
       posthog.capture("$pageview", { "$current_url": url })
     }
   }, [pathname, searchParams, posthog])
@@ -44,8 +40,6 @@ function PostHogPageView() {
 
 function SuspendedPostHogPageView() {
   return (
-    <Suspense fallback={null}>
-      <PostHogPageView />
-    </Suspense>
+    <PostHogPageView />
   )
 }

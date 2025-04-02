@@ -5,7 +5,7 @@ import { PostHog } from 'posthog-node';
 // Initialize PostHog
 const posthog = new PostHog(
   process.env.NEXT_PUBLIC_POSTHOG_KEY!,
-  { host: 'https://eu.i.posthog.com' }
+  { host: 'https://wodbot.cc/ingest' }
 );
 
 // Initialize Supabase client
