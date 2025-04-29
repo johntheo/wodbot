@@ -9,7 +9,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Initialize PostHog only on the client side
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: 'https://wodbot.cc/ingest',
+      api_host: 'https://eu.i.posthog.com',
       ui_host: "https://eu.posthog.com",
       loaded: (posthog) => {
         if (process.env.NODE_ENV === 'development') posthog.debug()
