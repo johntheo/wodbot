@@ -16,17 +16,43 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  },
+  global: {
+    headers: {
+      'x-application-name': 'wodbot-landing-page'
+    }
+  }
+});
 
 export async function POST(request: Request) {
   try {
     const { name, email, interest } = await request.json();
+
+    console.log('Attempting to connect to Supabase with URL:', supabaseUrl);
+    
+    // Test the connection first
+    const { data: testData, error: testError } = await supabase
+      .from('waitlist')
+      .select('count')
+      .limit(1);
+
+    if (testError) {
+      console.error('Supabase connection test failed:', testError);
+      throw new Error(`Supabase connection failed: ${testError.message}`);
+    }
+
+    console.log('Supabase connection test successful');
 
     const { data, error } = await supabase
       .from('waitlist')
       .insert([{ name, email, interest }]);
 
     if (error) {
+      console.error('Supabase insert error:', error);
       throw error;
     }
 
@@ -44,7 +70,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: 'Successfully registered!' });
   } catch (error: any) {
-    console.error('Registration error:', error);
+    console.error('Registration error details:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      stack: error.stack
+    });
     
     // Capture failed registration event
     await posthog.capture({
@@ -52,12 +84,17 @@ export async function POST(request: Request) {
       event: 'waitlist_registration_failed',
       properties: {
         error: error.message,
+        errorCode: error.code,
+        errorDetails: error.details,
         timestamp: new Date().toISOString(),
       },
     });
 
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { 
+        error: 'Erro ao se registrar. Por favor, tente novamente mais tarde.',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     );
   }

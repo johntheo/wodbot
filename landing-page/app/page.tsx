@@ -19,7 +19,6 @@ import {
   Clock,
   Award,
 } from "lucide-react"
-import ChatDemo, { type UserProfile } from "@/components/chat-demo"
 import TestimonialCarousel from "@/components/testimonial-carousel"
 import { useWaitlist } from '@/hooks/useWaitlist';
 import { toast } from "sonner";
@@ -27,18 +26,9 @@ import { toast } from "sonner";
 // import TestimonialCarousel from "@/components/testimonial-carousel-alt"
 
 export default function LandingPage() {
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [formData, setFormData] = useState({ name: '', email: '', interest: '' });
   const isChatActionInProgress = useRef(false)
   const { submitWaitlist, loading } = useWaitlist();
-
-  const handleProfileComplete = (profile: UserProfile) => {
-    setUserProfile(profile)
-  }
-
-  const handleResetProfile = () => {
-    setUserProfile(null)
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -108,9 +98,6 @@ export default function LandingPage() {
             <Link href="#features" className="text-sm font-medium hover:text-fitness-pink transition-colors">
               Recursos
             </Link>
-            <Link href="#demo" className="text-sm font-medium hover:text-fitness-pink transition-colors">
-              Experimente
-            </Link>
             <Link href="#waitlist" className="text-sm font-medium hover:text-fitness-pink transition-colors">
               Lista de Espera
             </Link>
@@ -158,8 +145,8 @@ export default function LandingPage() {
                     className="border-fitness-pink text-fitness-pink hover:bg-fitness-pink/5"
                     asChild
                   >
-                    <a href="#demo" className="flex items-center gap-2">
-                      <Play size={16} /> Testar Demo
+                    <a href="#waitlist" className="flex items-center gap-2">
+                      <Play size={16} /> Seja Notificado
                     </a>
                   </Button>
                 </div>
@@ -253,36 +240,36 @@ export default function LandingPage() {
 
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   <div className="aspect-[4/3] bg-gradient-to-br from-fitness-pink-light to-fitness-purple-light flex items-center justify-center">
-                    <div className="w-3/4 h-3/4 rounded-xl bg-white/90 shadow-lg p-6 flex flex-col gap-4">
-                      <div className="flex items-start gap-4">
-                        <div className="bg-fitness-pink/20 p-2 rounded-full">
-                          <Dumbbell className="h-6 w-6 text-fitness-pink" />
+                    <div className="w-[85%] md:w-3/4 h-auto md:h-3/4 rounded-xl bg-white/90 shadow-lg p-4 md:p-6 flex flex-col gap-3 md:gap-4 overflow-hidden">
+                      <div className="flex items-start gap-3 md:gap-4">
+                        <div className="bg-fitness-pink/20 p-2 rounded-full flex-shrink-0">
+                          <Dumbbell className="h-5 w-5 md:h-6 md:w-6 text-fitness-pink" />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">wodbot</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs md:text-sm text-muted-foreground break-words">
                             Com base no seu progresso, recomendo aumentar o peso do agachamento em 5kg esta semana.
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-4">
-                        <div className="bg-fitness-purple/20 p-2 rounded-full">
-                          <MessageSquare className="h-6 w-6 text-fitness-purple" />
+                      <div className="flex items-start gap-3 md:gap-4">
+                        <div className="bg-fitness-purple/20 p-2 rounded-full flex-shrink-0">
+                          <MessageSquare className="h-5 w-5 md:h-6 md:w-6 text-fitness-purple" />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">Você</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs md:text-sm text-muted-foreground break-words">
                             Meu joelho está incomodando. Pode sugerir uma alternativa?
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-4">
-                        <div className="bg-fitness-pink/20 p-2 rounded-full">
-                          <Dumbbell className="h-6 w-6 text-fitness-pink" />
+                      <div className="flex items-start gap-3 md:gap-4">
+                        <div className="bg-fitness-pink/20 p-2 rounded-full flex-shrink-0">
+                          <Dumbbell className="h-5 w-5 md:h-6 md:w-6 text-fitness-pink" />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">wodbot</p>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs md:text-sm text-muted-foreground break-words">
                             Vamos mudar para agachamento búlgaro com pesos mais leves para reduzir a tensão no joelho,
                             mas ainda trabalhar os mesmos músculos.
                           </p>
@@ -351,47 +338,6 @@ export default function LandingPage() {
                   <a href="#demo">Experimente Agora</a>
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Demo Section */}
-        <section id="demo" className="py-16 bg-white relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-fitness-pink-light rounded-full blur-3xl opacity-20 -z-10"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-fitness-purple-light rounded-full blur-3xl opacity-20 -z-10"></div>
-
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <Badge className="bg-fitness-pink text-white border-none">Demo ao Vivo</Badge>
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Experimente o wodbot</h2>
-                <p className="max-w-[700px] text-muted-foreground md:text-xl">
-                  Veja como o wodbot pode ajudá-lo a alcançar seus objetivos de fitness e nutrição
-                </p>
-              </div>
-            </div>
-            <div className="mt-12 w-full max-w-4xl mx-auto">
-              <div className="chat-container p-1">
-                <ChatDemo
-                  userProfile={userProfile}
-                  onProfileComplete={handleProfileComplete}
-                  onResetProfile={handleResetProfile}
-                />
-              </div>
-              <p className="text-center text-sm text-muted-foreground mt-4 italic">
-                Esta é uma demo limitada. Entre na lista de espera para ter acesso completo ao wodbot quando lançarmos!
-              </p>
-            </div>
-            <div className="mt-8 text-center">
-              <Button
-                size="lg"
-                className="bg-fitness-pink hover:bg-fitness-pink-dark text-white shadow-lg hover:shadow-xl transition-all"
-                asChild
-              >
-                <a href="#waitlist">
-                  Entre na Lista de Espera <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
             </div>
           </div>
         </section>
